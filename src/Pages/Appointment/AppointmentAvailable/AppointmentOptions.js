@@ -1,7 +1,6 @@
 import React from 'react';
-import PrimaryButton from '../../../Components/PrimaryButton/PrimaryButton';
 
-const AppointmentOptions = ({ appointmentOptions }) => {
+const AppointmentOptions = ({ appointmentOptions, setTreatment }) => {
     const { name, slots } = appointmentOptions;
     return (
         <div className="card w-96 bg-base-100 shadow-xl">
@@ -10,7 +9,7 @@ const AppointmentOptions = ({ appointmentOptions }) => {
                 <p className='text-center'>{slots.length > 0 ? slots[0] : 'Try another day'}</p>
                 <p className='text-center'>{slots.length} {slots.length > 1 ? 'spaces' : 'space'} available</p>
                 <div className="card-actions justify-center">
-                    <PrimaryButton>Book Appointment</PrimaryButton>
+                    <label onClick={() => setTreatment(appointmentOptions)} htmlFor="my_modal_6" className="bg-gradient-to-r from-primary to-secondary btn btn-primary text-white">open modal</label>
                 </div>
             </div>
         </div>
