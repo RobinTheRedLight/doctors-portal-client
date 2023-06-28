@@ -37,6 +37,9 @@ const AppointmentModal = ({ treatment, selectedDate, setTreatment, refetch }) =>
                     alert('Appointment booked successfully');
                     refetch();
                 }
+                else {
+                    alert(data.message);
+                }
             })
 
     }
