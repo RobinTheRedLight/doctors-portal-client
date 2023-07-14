@@ -16,7 +16,7 @@ const ManageDoctors = () => {
         queryKey: ['doctors'],
         queryFn: async () => {
             try {
-                const res = await fetch('http://localhost:5000/doctors', {
+                const res = await fetch('https://doctors-portal-server-omega-three.vercel.app/doctors', {
                     headers: {
                         authorization: `bearer ${localStorage.getItem('accessToken')}`
                     }
@@ -32,7 +32,7 @@ const ManageDoctors = () => {
 
 
     const handleDeleteDoctor = doctor => {
-        fetch(`http://localhost:5000/doctors/${doctor._id}`, {
+        fetch(`https://doctors-portal-server-omega-three.vercel.app/doctors/${doctor._id}`, {
             method: 'DELETE',
             headers: {
                 authorization: `bearer ${localStorage.getItem('accessToken')}`
@@ -54,7 +54,7 @@ const ManageDoctors = () => {
     return (
         <div>
             <h2 className="text-3xl">Manage Doctors: {doctors?.length}</h2>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto pt-5">
                 <table className="table w-full">
                     <thead>
                         <tr>
