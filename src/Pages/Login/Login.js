@@ -64,10 +64,24 @@ const Login = () => {
     })
       .then(res => res.json())
       .then(data => {
-        setLoginUserEmail(email);
+        getUserToken(email);
       }
       )
   }
+
+  const getUserToken = (email) => {
+    fetch(`https://doctors-portal-server-omega-three.vercel.app/jwt?email=${email}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.accessToken) {
+          console.log(data);
+          localStorage.setItem('accessToken', data.accessToken);
+          navigate('/');
+        }
+      })
+  }
+
+
 
   return (
     <div className='h-[800px] flex justify-center items-center'>
