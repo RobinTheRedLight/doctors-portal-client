@@ -1,17 +1,24 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthProvider';
 import useToken from '../../hooks/useToken';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 const SignUp = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const { createUser, updateUser } = useContext(AuthContext);
+    const { createUser, updateUser, providerLogin } = useContext(AuthContext);
+    const googleProvider = new GoogleAuthProvider();
     const [signUpError, setSignUPError] = useState('');
+    const [loginError, setLoginError] = useState('');
     const [createdUserEmail, setCreatedUserEmail] = useState('')
     const [token] = useToken(createdUserEmail);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = location.state?.from?.pathname || '/';
+
 
     if (token) {
         navigate('/');
@@ -38,6 +45,23 @@ const SignUp = () => {
                 console.log(error)
                 setSignUPError(error.message)
             });
+    }
+
+    const handleGoogleSignIn = () => {
+        providerLogin(googleProvider)
+            .then(result => {
+                const user = result.user;
+                saveUser(user.displayName, user.email);
+                console.log(user);
+                if (user.uid) {
+                    console.log(user.uid)
+                    navigate(from, { replace: true });
+                }
+                else {
+                    toast.error('Log in failed');
+                }
+            })
+            .catch(error => setLoginError(error.message))
     }
 
     const saveUser = (name, email) => {
@@ -86,10 +110,11 @@ const SignUp = () => {
                     </div>
                     <input className='btn btn-accent w-full mt-4' value="Sign Up" type="submit" />
                     {signUpError && <p className='text-red-600'>{signUpError}</p>}
+                    {loginError && <p className='text-red-600'>{loginError}</p>}
                 </form>
                 <p>Already have an account <Link className='text-secondary' to="/login">Please Login</Link></p>
                 <div className="divider">OR</div>
-                <button className='btn btn-outline w-full'>CONTINUE WITH GOOGLE</button>
+                <button onClick={handleGoogleSignIn} className='btn btn-outline w-full'>CONTINUE WITH GOOGLE</button>
 
             </div>
         </div>
